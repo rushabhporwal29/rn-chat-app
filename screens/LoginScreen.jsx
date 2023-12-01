@@ -35,7 +35,7 @@ const LoginScreen = () => {
                         getDoc(doc(firestoreDB, "users", userCred?.user.uid)).then(
                             (docSnap) => {
                                 if (docSnap.exists()) {
-                                    console.log("User Data : ", docSnap.data());
+                                    // console.log("User Data : ", docSnap.data());
                                     dispatch(SET_USER(docSnap.data()));
                                 }
                             }

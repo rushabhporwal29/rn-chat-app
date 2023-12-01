@@ -38,14 +38,25 @@ const ChatScreen = ({ route }) => {
     const user = useSelector((state) => state.user.user);
 
     const textInputRef = useRef(null);
+    const scrollViewRef = useRef(null);
 
     console.log("Chat Room: ", room);
 
     const handleKeyboardOpen = () => {
+        scrollToBottom();
+        console.log("keyboard press");
         if (textInputRef.current) {
             textInputRef.current.focus();
         }
     };
+
+    const scrollToBottom = () => {
+        scrollViewRef.current.scrollToEnd({ animated: true });
+    };
+    useLayoutEffect(() => {
+        scrollToBottom();
+    },[]);
+    
 
     const sendMessage = async () => {
         const timeStamp = serverTimestamp();
@@ -70,7 +81,7 @@ const ChatScreen = ({ route }) => {
             collection(firestoreDB, "chats", room?._id, "messages"),
             orderBy("timeStamp", "asc")
         );
-
+        scrollToBottom();
         const unsubscribe = onSnapshot(msgQuery, (querySnap) => {
             const upMsg = querySnap.docs.map((doc) => doc.data());
             setMessages(upMsg);
@@ -130,7 +141,7 @@ const ChatScreen = ({ route }) => {
                     keyboardVerticalOffset={160}
                 >
                     <>
-                        <ScrollView>
+                        <ScrollView ref={scrollViewRef} onContentSizeChange={() => {scrollToBottom();}}>
                             {isLoading ? (
                                 <>
                                     <View className="w-full flex items-center justify-center">
@@ -141,7 +152,7 @@ const ChatScreen = ({ route }) => {
                                 <>
                                     {messages?.map((msg, i) =>
                                         msg.user.providerData.email === user.providerData.email ? (
-                                            <View className="m-1" key={i}>
+                                            <View className="m-3" key={i}>
                                                 <View
                                                     style={{ alignSelf: "flex-end" }}
                                                     className="px-4 py-2 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl bg-primary w-auto  relative"
@@ -152,7 +163,7 @@ const ChatScreen = ({ route }) => {
                                                 </View>
                                                 <View style={{ alignSelf: "flex-end" }}>
                                                     {msg?.timeStamp?.seconds && (
-                                                        <Text className="text-[12px] text-black font-semibold">
+                                                        <Text className="text-[12px] text-black font-semibold" ref={textInputRef}>
                                                             {new Date(
                                                                 parseInt(msg?.timeStamp?.seconds) * 1000
                                                             ).toLocaleTimeString("en-US", {
@@ -218,6 +229,9 @@ const ChatScreen = ({ route }) => {
                                     placeholderTextColor={"#999"}
                                     value={message}
                                     onChangeText={(text) => setMessage(text)}
+                                    onPressIn={handleKeyboardOpen}
+                                    ref={textInputRef}
+                                    multiline={true}
                                 />
 
                                 <TouchableOpacity>

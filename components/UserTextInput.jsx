@@ -15,12 +15,13 @@ const UserTextInput = ({
   
 
     const handleTextChanged = async (text) => {
-        await setStateValue(value);
         setValue(text);
+        // console.log("change: ",text);
+        await setStateValue(text);
 
         if (placeholder === "Email") {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const status = emailRegex.test(value);
+            const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+            const status = emailRegex.test(text);
             setIsEmailValid(status);
             setGetEmailValidationStatus(status);
         }

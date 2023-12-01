@@ -1,5 +1,5 @@
 import { View, Text, Image, Dimensions, TouchableOpacity, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { BGImage, Logo } from "../assets";
@@ -27,6 +27,7 @@ const SignUpScreen = () => {
 
 
     const navigation = useNavigation();
+    const scrollViewRef = useRef(null);
 
     const handleAvatar = (item) => {
         setAvatar(item?.image.asset.url);
@@ -57,7 +58,7 @@ const SignUpScreen = () => {
 
     return (
 
-        <ScrollView>
+        <ScrollView ref={scrollViewRef} onContentSizeChange={() => {scrollViewRef.current.scrollToEnd({ animated: true });}}>
             <View className="flex-1 items-center justify-start">
                 <Image
                     source={BGImage}

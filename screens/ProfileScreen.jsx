@@ -25,7 +25,7 @@ const ProfileScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 items-center justify-start">
+    <SafeAreaView className="flex-1 items-center justify-start py-6">
       {/* icons */}
       <View className="w-full flex-row items-center justify-between px-4">
         <TouchableOpacity onPress={() => navigation.goBack()}>

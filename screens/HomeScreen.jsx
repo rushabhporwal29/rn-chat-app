@@ -25,13 +25,13 @@ const HomeScreen = () => {
           const chatRooms = querySnapShot.docs.map((doc) => doc.data());
           setChats(chatRooms);
           setIsLoading(false);
-          console.log("Chat Rooms",chatRooms);
+          // console.log("Chat Rooms",chatRooms);
         });
     
         //  Return the unsubscribe funciton to stop listening to the updates
         return unsubscribe;
       }, []);
-    console.log("Logged User: ", user);
+    console.log("Logged User: ", user.providerData.email);
     return (
         <View className="flex-1">
             <SafeAreaView>
